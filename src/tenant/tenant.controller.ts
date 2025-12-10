@@ -135,7 +135,7 @@ export class TenantController {
 
   @Delete('social-pages/:id')
   @Permissions(TenantPermission.MANAGE_SOCIAL_PAGES)
-  @Roles(UserRole.TENANT_ADMIN)
+  @Roles(UserRole.TENANT_ADMIN, UserRole.TENANT_USER)
   async deleteSocialPage(@CurrentUser() user: User, @Param('id') id: string) {
     if (!user.tenantId) {
       throw new ForbiddenException('User is not associated with a tenant');
