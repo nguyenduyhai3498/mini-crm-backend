@@ -11,6 +11,7 @@ import { PostsModule } from '../posts/posts.module';
 import { MessagesModule } from '../messages/messages.module';
 import { EmailModule } from '../email/email.module';
 import * as entities from '../entities';
+import crypto from 'crypto';
 
 @Module({
   imports: [
