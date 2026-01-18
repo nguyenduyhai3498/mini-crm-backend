@@ -17,6 +17,24 @@ import { UpdateSocialPageDto } from './dto/update-social-page.dto';
 import { AuthService } from '../auth/auth.service';
 import { UserRole } from '../common/enums/role.enum';
 import { FacebookService } from '../social/services/facebook.service';
+import { TenantSettings } from 'src/entities/tenant-settings.entity';
+import { UpdateTenantSettingsDto } from './dto/update-settings.dto';
+
+const DEFAULT_BRAND_SETTINGS = {
+  industry: '',
+  targetAudience: '',
+  offerings: '',
+  archetype: '',
+  tone: '',
+  defaultLanguage: '',
+  exemplar: '',
+  forbiddenKeywords: [],
+};
+
+const DEFAULT_SYSTEM_SETTINGS = {
+  language: 'en',
+  timeZone: 'UTC',
+};
 
 @Injectable()
 export class TenantService {
@@ -25,6 +43,8 @@ export class TenantService {
     private userRepository: Repository<User>,
     @InjectRepository(Tenant)
     private tenantRepository: Repository<Tenant>,
+    @InjectRepository(TenantSettings)
+    private tenantSettingsRepository: Repository<TenantSettings>,
     @InjectRepository(SocialPage)
     private socialPageRepository: Repository<SocialPage>,
     private authService: AuthService,
@@ -270,5 +290,34 @@ export class TenantService {
     // Check if user has explicit permission for this page
     return user.authorizedPages.some((page) => page.id === pageId);
   }
-}
 
+  async getTenantSettings(tenantId: string) {
+    const tenantSettings = await this.tenantSettingsRepository.findOne({
+      where: { tenant: { id: tenantId } },
+    });
+    
+    return {
+      statusCode: 200,
+      brandSettings: tenantSettings?.brandSettings || DEFAULT_BRAND_SETTINGS,
+      systemSettings: tenantSettings?.systemSettings || DEFAULT_SYSTEM_SETTINGS,
+    };
+  }
+
+  async updateTenantSettings(tenantId, updateTenantSettingsDto: UpdateTenantSettingsDto){
+    let tenantSettings = await this.tenantSettingsRepository.findOne({
+      where: { tenant: { id: tenantId } },
+    });
+
+    if (!tenantSettings) {
+      tenantSettings = this.tenantSettingsRepository.create({
+        tenant: { id: tenantId },
+        brandSettings: updateTenantSettingsDto.brandSettings || DEFAULT_BRAND_SETTINGS,
+        systemSettings: updateTenantSettingsDto.systemSettings || DEFAULT_SYSTEM_SETTINGS,
+      });
+    }
+
+    tenantSettings.brandSettings = updateTenantSettingsDto.brandSettings;
+    tenantSettings.systemSettings = updateTenantSettingsDto.systemSettings;
+    return this.tenantSettingsRepository.save(tenantSettings);
+  }
+}

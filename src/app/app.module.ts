@@ -11,6 +11,8 @@ import { PostsModule } from '../posts/posts.module';
 import { MessagesModule } from '../messages/messages.module';
 import { EmailModule } from '../email/email.module';
 import * as entities from '../entities';
+import { WebhookModule } from '../webhook/webhook.module';
+import { Open3rdModule } from '../open3rd/open3rd.module';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import * as entities from '../entities';
     PostsModule,
     MessagesModule,
     EmailModule,
+    WebhookModule,
+    Open3rdModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -21,6 +21,7 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { CreateSocialPageDto } from './dto/create-social-page.dto';
 import { UpdateSocialPageDto } from './dto/update-social-page.dto';
+import { UpdateTenantSettingsDto } from './dto/update-settings.dto';
 import { User } from '../entities/user.entity';
 
 @Controller('tenant')
@@ -142,6 +143,22 @@ export class TenantController {
     }
     await this.tenantService.deleteSocialPage(user.tenantId, id);
     return { message: 'Social page deleted successfully' };
+  }
+
+  // Tenant Settings Management
+  @Get('settings')
+  @Permissions(TenantPermission.MANAGE_SOCIAL_PAGES)
+  async getTenantSettings(@CurrentUser() user: User) {
+    return this.tenantService.getTenantSettings(user.tenantId);
+  }
+
+  @Put('settings')
+  @Permissions(TenantPermission.MANAGE_SOCIAL_PAGES)
+  async updateTenantSettings(@CurrentUser() user: User, @Body() updateTenantSettingsDto: UpdateTenantSettingsDto) {
+    if (!user.tenantId) {
+      throw new ForbiddenException('User is not associated with a tenant');
+    }
+    return this.tenantService.updateTenantSettings(user.tenantId, updateTenantSettingsDto);
   }
 }
 

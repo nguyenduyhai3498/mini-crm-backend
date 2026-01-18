@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user.entity';
 import { SocialPage } from './social-page.entity';
+import { TenantSettings } from './tenant-settings.entity';
 
 @Entity('tenants')
 export class Tenant {
@@ -37,6 +39,9 @@ export class Tenant {
 
   @OneToMany(() => SocialPage, (page) => page.tenant)
   socialPages: SocialPage[];
+
+  @OneToOne(() => TenantSettings, (settings) => settings.tenant, { cascade: true })
+  tenantSettings: TenantSettings;
 }
 
 
