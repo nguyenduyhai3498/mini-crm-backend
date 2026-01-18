@@ -13,6 +13,7 @@ import { EmailModule } from '../email/email.module';
 import * as entities from '../entities';
 import { WebhookModule } from '../webhook/webhook.module';
 import { Open3rdModule } from '../open3rd/open3rd.module';
+import crypto from 'crypto';
 
 @Module({
   imports: [
