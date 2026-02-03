@@ -109,6 +109,12 @@ export class AdminController {
   async getStatistics() {
     return this.adminService.getStatistics();
   }
+
+  @Get('tenant/:tenantId/social-pages')
+  @Permissions(AdminPermission.MANAGE_TENANTS)
+  async getSocialPages(@Param('tenantId') tenantId: string, @Query('page', ParseIntPipe) page: number = 1, @Query('limit', ParseIntPipe) limit: number = 10) {
+    return this.adminService.getSocialPages(tenantId, page, limit);
+  }
 }
 
 

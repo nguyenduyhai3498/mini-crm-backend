@@ -9,6 +9,7 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { AuthService } from '../auth/auth.service';
 import { UserRole } from '../common/enums/role.enum';
+import { SocialPage } from 'src/entities/social-page.entity';
 
 @Injectable()
 export class AdminService {
@@ -18,6 +19,8 @@ export class AdminService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private authService: AuthService,
+    @InjectRepository(SocialPage)
+    private socialPageRepository: Repository<SocialPage>,
   ) {}
 
   // Tenant Management
@@ -184,6 +187,16 @@ export class AdminService {
       totalUsers,
       totalAdmins,
     };
+  }
+
+  async getSocialPages(tenantId: string, page: number = 1, limit: number = 10): Promise<SocialPage[]> {
+    const socialPages = await this.socialPageRepository.find({
+      where: { tenantId },
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return socialPages;
   }
 }
 
