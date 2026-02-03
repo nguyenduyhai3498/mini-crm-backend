@@ -75,7 +75,7 @@ export class Open3rdService {
                 const pageId = responsePage?.data?.data?.user_id;
                 const urlPageToken = 'https://graph.facebook.com/' + pageId + '/accounts?access_token=' + accessToken;
                 const responsePageToken = await axios.get(urlPageToken);
-                console.log(responsePageToken);
+                console.log('[facebookCallback] responsePageToken', responsePageToken?.data);
                 if(responsePageToken?.data?.data?.length > 0) {
                     for(const page of responsePageToken?.data?.data) {
                         console.log('[facebookCallback] page', page);
