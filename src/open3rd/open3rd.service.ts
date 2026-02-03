@@ -6,6 +6,7 @@ import { Tenant } from '../entities/tenant.entity';
 import {TenantSettings} from '../entities/tenant-settings.entity';
 import crypto from 'crypto';
 import axios from 'axios';
+import { SocialPlatform } from 'src/common/enums/social-platform.enum';
 
 @Injectable()
 export class Open3rdService {
@@ -92,7 +93,7 @@ export class Open3rdService {
                         };
                         const responseProfilePage = await axios.get(urlProfilePage, { params: dataProfilePage });
                         const profilePicture = responseProfilePage?.data?.picture?.data?.url ?? null;
-                        const checkPage = await this.socialPageRepository.findOne({ where: { pageId: page?.id } });
+                        const checkPage = await this.socialPageRepository.findOne({ where: { pageId: page?.id, platform: SocialPlatform.FACEBOOK } });
                         console.log('[facebookCallback] checkPage', checkPage);
                         if(checkPage !== null) {
                             Object.assign(checkPage, {
@@ -109,7 +110,8 @@ export class Open3rdService {
                                 accessToken: page?.access_token,
                                 name: page?.name,
                                 profilePicture: profilePicture,
-                                tenantId: state
+                                tenantId: state,
+                                platform: SocialPlatform.FACEBOOK
                             });
                             const socialPage = await this.socialPageRepository.save(newSocialPage);
                             console.log('[facebookCallback] socialPage', socialPage);
