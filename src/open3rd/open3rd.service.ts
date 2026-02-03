@@ -78,6 +78,7 @@ export class Open3rdService {
                 console.log(responsePageToken);
                 if(responsePageToken?.data?.data?.length > 0) {
                     for(const page of responsePageToken?.data?.data) {
+                        console.log('[facebookCallback] page', page);
                         const urlSubcribe = 'https://graph.facebook.com/' + page?.id + '/subscribed_apps';
                         const dataSubcribe = {
                             access_token: page?.access_token,
@@ -89,14 +90,23 @@ export class Open3rdService {
                             access_token: page?.access_token,
                             fields: 'picture'
                         };
-                        const responseProfilePage = await axios.get(urlProfilePage);
+                        const responseProfilePage = await axios.get(urlProfilePage, { params: dataProfilePage });
                         const profilePicture = responseProfilePage?.data?.picture?.data?.url ?? null;
-
-                        await this.socialPageRepository.update({ pageId: page?.id }, {
-                            accessToken: page?.access_token,
-                            name: page?.name,
-                            profilePicture: profilePicture
-                        });
+                        const checkPage = await this.socialPageRepository.findOne({ where: { pageId: page?.id } });
+                        if(checkPage) {
+                            await this.socialPageRepository.update({ id: checkPage?.id }, {
+                                accessToken: page?.access_token,
+                                name: page?.name,
+                                profilePicture: profilePicture
+                            });
+                        } else {
+                            await this.socialPageRepository.create({
+                                pageId: page?.id,
+                                accessToken: page?.access_token,
+                                name: page?.name,
+                                profilePicture: profilePicture
+                            });
+                        }
                     }
                 }
             }
