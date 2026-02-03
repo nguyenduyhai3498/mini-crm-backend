@@ -54,7 +54,7 @@ export class Open3rdService {
         };
         let url = 'https://graph.facebook.com/oauth/access_token?' + Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
         const response = await axios.get(url);
-        console.log('https://graph.facebook.com/oauth/access_token', response);
+        console.log('[facebookCallback] response', response?.data);
         if(response) {
             const accessToken = response.data.access_token;
             const dataAccessToken = {
@@ -66,10 +66,11 @@ export class Open3rdService {
             const responseAccessToken = await axios.get(urlAccessToken, {
                 params: dataAccessToken
             });
-
+            console.log('[facebookCallback] responseAccessToken', responseAccessToken?.data);
             const clientAccessToken = responseAccessToken.data.access_token;
             const urlPage = 'https://graph.facebook.com/debug_token?access_token=' + clientAccessToken + '&input_token=' + accessToken;
             const responsePage = await axios.get(urlPage);
+            console.log('[facebookCallback] responsePage', responsePage?.data);
             if(responsePage?.data?.data?.is_valid) {
                 const pageId = responsePage?.data?.data?.user_id;
                 const urlPageToken = 'https://graph.facebook.com/' + pageId + '/accounts?access_token=' + accessToken;
