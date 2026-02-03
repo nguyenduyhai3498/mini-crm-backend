@@ -189,9 +189,18 @@ export class AdminService {
     };
   }
 
-  async getSocialPages(tenantId: string, page: number = 1, limit: number = 10): Promise<SocialPage[]> {
+  async getSocialPagesByTenantId(tenantId: string, page: number = 1, limit: number = 10): Promise<SocialPage[]> {
     const socialPages = await this.socialPageRepository.find({
       where: { tenantId },
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return socialPages;
+  }
+
+  async getSocialPages(page: number = 1, limit: number = 10): Promise<SocialPage[]> {
+    const socialPages = await this.socialPageRepository.find({
       order: { createdAt: 'DESC' },
       skip: (page - 1) * limit,
       take: limit,

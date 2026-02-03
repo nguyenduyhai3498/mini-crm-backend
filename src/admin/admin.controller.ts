@@ -112,8 +112,14 @@ export class AdminController {
 
   @Get('tenant/:tenantId/social-pages')
   @Permissions(AdminPermission.MANAGE_TENANTS)
-  async getSocialPages(@Param('tenantId') tenantId: string, @Query('page', ParseIntPipe) page: number = 1, @Query('limit', ParseIntPipe) limit: number = 10) {
-    return this.adminService.getSocialPages(tenantId, page, limit);
+  async getSocialPagesByTenantId(@Param('tenantId') tenantId: string, @Query('page', ParseIntPipe) page: number = 1, @Query('limit', ParseIntPipe) limit: number = 10) {
+    return this.adminService.getSocialPagesByTenantId(tenantId, page, limit);
+  }
+
+  @Get('social-pages')
+  @Permissions(AdminPermission.MANAGE_TENANTS)
+  async getSocialPages(@Query('page', ParseIntPipe) page: number = 1, @Query('limit', ParseIntPipe) limit: number = 10) {
+    return this.adminService.getSocialPages(page, limit);
   }
 }
 
