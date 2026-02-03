@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Open3rdService } from './open3rd.service';
 import { Public } from 'src/auth/decorators/public.decorator';
+import type { Response } from 'express';
 
 @Controller('open3rd')
 export class Open3rdController {
@@ -10,5 +11,22 @@ export class Open3rdController {
     @Get('settings')
     async getSettings(@Query('tenantId') tenantId: string) {
         return this.open3rdService.getSettings(tenantId);
+    }
+
+    @Public()
+    @Get('facebook/redirect')
+    async facebookRedirect() {
+        return this.open3rdService.facebookRedirect();
+    }   
+
+    @Public()
+    @Get('facebook/callback')
+    async facebookCallback(@Query('code') code: string, @Res() res: Response) {
+        const urlRedirect = process.env.FE_APP_URL + '/';
+        // window.location.href = urlRedirect;
+        const response = await this.open3rdService.facebookCallback(code);
+        // return res.redirect(response.urlRedirect);
+        
+        return res.redirect(urlRedirect);
     }
 }

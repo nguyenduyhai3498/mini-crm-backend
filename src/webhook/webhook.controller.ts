@@ -5,14 +5,14 @@ import {
   } from '@nestjs/common';
   
 import { WebhookService } from './webhook.service';
-import { SocialPage } from '../entities/social-page.entity';
-import { Any } from 'typeorm/browser';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 
 @Controller('webhook')
 export class WebhookController {
     constructor(private readonly webhookService: WebhookService) {}
 
+    @Public()
     @Get('facebook')
     async facebookWebhook(@Body() body: any) {
         return this.webhookService.facebookWebhook(body);

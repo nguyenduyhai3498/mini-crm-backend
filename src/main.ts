@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app/app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -29,7 +29,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   // Global prefix for all routes
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', { exclude: [
+    {
+      path: 'open3rd/facebook/callback',
+      method: RequestMethod.GET,
+    }]
+  });
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
