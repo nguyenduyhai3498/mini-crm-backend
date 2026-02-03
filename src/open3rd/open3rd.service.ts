@@ -33,8 +33,8 @@ export class Open3rdService {
     }
 
 
-    async facebookRedirect() {
-        const challengeCode = crypto.randomBytes(10).toString('hex');
+    async facebookRedirect(tenantId: string) {
+        const challengeCode = tenantId; //crypto.randomBytes(10).toString('hex');
         const appId = process.env.FACEBOOK_APP_ID;
         const redirectUri = process.env.APP_URL + '/open3rd/facebook/callback';
         const redirect_url = 'https://www.facebook.com/dialog/oauth?scope=email%2C%20pages_messaging%2C%20pages_manage_posts%2C%20pages_manage_metadata%2C%20pages_read_engagement%2C%20pages_read_user_content%2C%20pages_manage_engagement%2C%20%20public_profile%2Cbusiness_management&client_id=' + appId + '&redirect_uri=' + redirectUri + '&state=' + challengeCode  + '&response_type=code';
@@ -44,7 +44,7 @@ export class Open3rdService {
         };
     }
 
-    async facebookCallback(code: string) {
+    async facebookCallback(code: string, state: string) {
         let query= {
             grant_type: 'authorization_code',
             client_id: process.env.FACEBOOK_APP_ID,
@@ -97,14 +97,16 @@ export class Open3rdService {
                             await this.socialPageRepository.update({ id: checkPage?.id }, {
                                 accessToken: page?.access_token,
                                 name: page?.name,
-                                profilePicture: profilePicture
+                                profilePicture: profilePicture,
+                                tenantId: state
                             });
                         } else {
                             await this.socialPageRepository.create({
                                 pageId: page?.id,
                                 accessToken: page?.access_token,
                                 name: page?.name,
-                                profilePicture: profilePicture
+                                profilePicture: profilePicture,
+                                tenantId: state
                             });
                         }
                     }
