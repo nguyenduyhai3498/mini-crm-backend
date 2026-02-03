@@ -36,7 +36,7 @@ export class Open3rdService {
     async facebookRedirect() {
         const challengeCode = crypto.randomBytes(10).toString('hex');
         const appId = process.env.FACEBOOK_APP_ID;
-        const redirectUri = process.env.APP_URL + 'api/open3rd/facebook/callback';
+        const redirectUri = process.env.APP_URL + '/open3rd/facebook/callback';
         const redirect_url = 'https://www.facebook.com/dialog/oauth?scope=email%2C%20pages_messaging%2C%20pages_manage_posts%2C%20pages_manage_metadata%2C%20pages_read_engagement%2C%20pages_read_user_content%2C%20pages_manage_engagement%2C%20%20public_profile%2Cbusiness_management&client_id=' + appId + '&redirect_uri=' + redirectUri + '&state=' + challengeCode  + '&response_type=code';
         
         return {
@@ -49,7 +49,7 @@ export class Open3rdService {
             grant_type: 'authorization_code',
             client_id: process.env.FACEBOOK_APP_ID,
             client_secret: process.env.FACEBOOK_APP_SECRET,
-            redirect_uri: process.env.APP_URL + 'open3rd/facebook/callback',
+            redirect_uri: process.env.APP_URL + '/open3rd/facebook/callback',
             code: code
         };
         let url = 'https://graph.facebook.com/oauth/access_token?' + Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
