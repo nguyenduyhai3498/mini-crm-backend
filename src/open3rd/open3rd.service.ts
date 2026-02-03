@@ -93,6 +93,7 @@ export class Open3rdService {
                         const responseProfilePage = await axios.get(urlProfilePage, { params: dataProfilePage });
                         const profilePicture = responseProfilePage?.data?.picture?.data?.url ?? null;
                         const checkPage = await this.socialPageRepository.findOne({ where: { pageId: page?.id } });
+                        console.log('[facebookCallback] checkPage', checkPage);
                         if(checkPage) {
                             await this.socialPageRepository.update({ id: checkPage?.id }, {
                                 accessToken: page?.access_token,
