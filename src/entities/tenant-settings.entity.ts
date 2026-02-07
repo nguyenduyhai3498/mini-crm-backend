@@ -21,7 +21,7 @@ export class TenantSettings {
   @Column({ type: 'json', name: 'system_setting' })
   systemSettings: Record<string, any>;
 
-  @Column({ type: 'json', name: 'content_strategy' })
+  @Column({ type: 'json', name: 'content_strategy', nullable: true })
   contentStrategy: Record<string, any>;
 
   @CreateDateColumn()
