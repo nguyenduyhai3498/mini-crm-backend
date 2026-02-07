@@ -207,6 +207,22 @@ export class AdminService {
     });
     return socialPages;
   }
+
+  async getTanentUsers(page: number = 1, limit: number = 10): Promise<{ data: User[]; total: number; page: number; totalPages: number }> {
+    const [users, total] = await this.userRepository.findAndCount({
+      select: ['id', 'email', 'fullName', 'role', 'createdAt', 'tenantPermissions', 'isActive', 'tenantId'],
+      relations: ['tenant'],
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return {
+      data: users,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
 }
 
 

@@ -121,6 +121,12 @@ export class AdminController {
   async getSocialPages(@Query('page', ParseIntPipe) page: number = 1, @Query('limit', ParseIntPipe) limit: number = 10) {
     return this.adminService.getSocialPages(page, limit);
   }
+
+  @Get('tanent-users')
+  @Permissions(AdminPermission.MANAGE_TENANTS)
+  async getTanentUsers(@Query('page', ParseIntPipe) page: number = 1, @Query('limit', ParseIntPipe) limit: number = 10) {
+    return this.adminService.getTanentUsers(page, limit);
+  }
 }
 
 

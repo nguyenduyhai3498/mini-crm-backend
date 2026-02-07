@@ -36,6 +36,14 @@ const DEFAULT_SYSTEM_SETTINGS = {
   timeZone: 'UTC',
 };
 
+const DEFAULT_CONTENT_STRATEGY = {
+  objective: '',
+  format: '',
+  focus: '',
+  occasion: '',
+  overrideLanguage: '',
+};
+
 @Injectable()
 export class TenantService {
   constructor(
@@ -300,6 +308,7 @@ export class TenantService {
       statusCode: 200,
       brandSettings: tenantSettings?.brandSettings || DEFAULT_BRAND_SETTINGS,
       systemSettings: tenantSettings?.systemSettings || DEFAULT_SYSTEM_SETTINGS,
+      contentStrategy: tenantSettings?.contentStrategy || DEFAULT_CONTENT_STRATEGY,
     };
   }
 
@@ -318,6 +327,7 @@ export class TenantService {
 
     tenantSettings.brandSettings = updateTenantSettingsDto.brandSettings;
     tenantSettings.systemSettings = updateTenantSettingsDto.systemSettings;
+    tenantSettings.contentStrategy = updateTenantSettingsDto.contentStrategy;
     return this.tenantSettingsRepository.save(tenantSettings);
   }
 }
