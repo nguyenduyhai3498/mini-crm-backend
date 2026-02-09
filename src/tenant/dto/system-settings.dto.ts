@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class SystemSettingsDto {
   @IsNotEmpty()
@@ -6,6 +6,15 @@ export class SystemSettingsDto {
 
   @IsNotEmpty()
   timezone: string;
+
+  @IsOptional()
+  businessName: string;
+
+  @IsOptional()
+  dateFormat: string;
+
+  @IsOptional()
+  currency: string;
 }
 
 

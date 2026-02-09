@@ -30,6 +30,7 @@ export class Open3rdService {
             statusCode: 200,
             brandSettings: tenantSettings?.brandSettings || {},
             systemSettings: tenantSettings?.systemSettings || {},
+            contentStrategy: tenantSettings?.contentStrategy || {},
         };
     }
 

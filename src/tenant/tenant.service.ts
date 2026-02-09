@@ -33,8 +33,12 @@ const DEFAULT_BRAND_SETTINGS = {
 
 const DEFAULT_SYSTEM_SETTINGS = {
   language: 'en',
-  timeZone: 'UTC',
+  timeZone: 'ICT (Bangkok, Hanoi, Jakarta)',
+  businessName: '',
+  dateFormat: 'DD/MM/YYYY',
+  currency: 'USD',
 };
+
 
 const DEFAULT_CONTENT_STRATEGY = {
   objective: '',
@@ -322,6 +326,7 @@ export class TenantService {
         tenant: { id: tenantId },
         brandSettings: updateTenantSettingsDto.brandSettings || DEFAULT_BRAND_SETTINGS,
         systemSettings: updateTenantSettingsDto.systemSettings || DEFAULT_SYSTEM_SETTINGS,
+        contentStrategy: updateTenantSettingsDto.contentStrategy || DEFAULT_CONTENT_STRATEGY,
       });
     }
 
